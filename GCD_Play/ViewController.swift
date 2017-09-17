@@ -29,6 +29,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         view.addSubview(tableView)
         
+
+        versionThreeCall()
+        
+    }
+    
+    func versionOneCall() {
+        
         DispatchQueue.global(qos: .userInteractive).async {
             self.tableData = Data.getData()
             
@@ -36,10 +43,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.tableView.reloadData()
             }
         }
-        
-        
     }
-
+    
+    func versionTwoCall() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            Data.getData(completion: { (data) in
+                
+                self.tableData = data
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
+    }
+    
+    func versionThreeCall() {
+    
+        Data.getDataBackground { (data) in
+            self.tableData = data
+            self.tableView.reloadData()
+        }
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count
     }

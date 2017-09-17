@@ -16,6 +16,42 @@ class Data {
     init() { }
     
     static func getData() -> [Data] {
+        
+        let a = buildData()
+        
+        sleep(2)
+        
+        return a
+        
+    }
+    
+    static func getData(completion: ([Data]) -> ()) {
+    
+        let a = buildData()
+        
+        sleep(2)
+        
+        completion(a)
+        
+    }
+    
+    static func getDataBackground(completion: @escaping ([Data]) -> ()) {
+        print("Step 1")
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            let a = buildData()
+            
+            sleep(2)
+            
+            DispatchQueue.main.async {
+                completion(a)
+            }
+            print("Step 3")
+        }
+        print("Step 2")
+        
+    }
+    static func buildData() -> [Data]{
         let a: Data = Data()
         let b: Data = Data()
         let c: Data = Data()
@@ -25,9 +61,13 @@ class Data {
         arr.append(b)
         arr.append(c)
         
-        sleep(2)
-        
         return arr
     }
-    
 }
+
+
+
+
+
+
+
